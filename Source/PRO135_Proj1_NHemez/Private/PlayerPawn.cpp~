@@ -1,0 +1,120 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "PlayerPawn.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputActionValue.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Components/ArrowComponent.h"
+#include "GameFramework/Controller.h"
+#include "Physics/ImmediatePhysics/ImmediatePhysicsShared/ImmediatePhysicsCore.h"
+
+// Sets default values
+APlayerPawn::APlayerPawn()
+{
+ 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	RootComponent = Mesh;
+	
+	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
+	Arrow->SetupAttachment(RootComponent);
+
+	MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComp"));
+
+	// Don't rotate when the controller rotates. Let that just affect the camera.
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+
+}
+
+void APlayerPawn::Move(const FInputActionValue& Value)
+{
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	DoMove(MovementVector.X, MovementVector.Y);
+}
+
+void APlayerPawn::Look(const FInputActionValue& Value)
+{
+	// input is a Vector2D
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+	// route the input
+	DoLook(LookAxisVector.X, LookAxisVector.Y);
+}
+
+// Called when the game starts or when spawned
+void APlayerPawn::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(DefaultInputMappingContext, 0);
+		}
+	}
+	
+}
+
+// Called every frame
+void APlayerPawn::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+
+
+// Called to bind functionality to input
+void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		// Moving
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerPawn::Move);
+
+		// Looking
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &APlayerPawn::Look);
+	}
+}
+
+void APlayerPawn::DoMove(const float Right, const float Forward)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, 
+		FString::Printf(TEXT("Bouge")));
+	if (GetController() != nullptr)
+	{
+		// find out which way is forward
+		//const FRotator Rotation = GetController()->GetControlRotation();
+		const FRotator YawRotation(0, 0, 0);
+
+		// get forward vector
+		const FVector ForwardDirection = FVector(1,0,0);
+
+		// get right vector 
+		const FVector RightDirection = FVector(0,1,0);
+
+		// add movement 
+		AddMovementInput(ForwardDirection, Forward);
+		AddMovementInput(RightDirection, Right);
+	}
+}
+
+void APlayerPawn::DoLook(const float Yaw, const float Pitch)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, 
+		FString::Printf(TEXT("Vise")));
+	if (GetController() != nullptr)
+	{
+		// add yaw and pitch input to controller
+		AddControllerYawInput(Yaw);
+		Arrow->AddLocalRotation(FRotator(0, Yaw, 0));
+	}
+}
+
