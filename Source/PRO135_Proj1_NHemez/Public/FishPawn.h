@@ -37,7 +37,9 @@ class PRO135_PROJ1_NHEMEZ_API AFishPawn : public APawn
 	UNiagaraSystem* DeathFX;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="VFX", meta = (AllowPrivateAccess = "true"))
-	int ScoreToGive = 500;
+
+	int ScoreToGive = 2;
+
 
 protected:
 	
