@@ -23,20 +23,20 @@ class PRO135_PROJ1_NHEMEZ_API UGunManComponent : public USkeletalMeshComponent
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="VFX", meta = (AllowPrivateAccess = "true"))
 	UNiagaraSystem* ShotFX;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadonly, meta = (AllowPrivateAccess = "true"))
 	float RotationMax = 1.0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float RotationMin = -1.0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int Damage = 12;
+	int Damage = 62;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int Life = 5;
+	int Life = 3;
 
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UGunManWidget* MyInfo;
+	UGunManWidget* Info;
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
