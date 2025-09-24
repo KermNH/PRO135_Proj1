@@ -25,7 +25,8 @@ class PRO135_PROJ1_NHEMEZ_API AFishPawn : public APawn
 	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    int MinLife = 100.0f;
+
+    int MinLife = 25.0f;
     	
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int MaxLife = 100.0f;
@@ -37,7 +38,11 @@ class PRO135_PROJ1_NHEMEZ_API AFishPawn : public APawn
 	UNiagaraSystem* DeathFX;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="VFX", meta = (AllowPrivateAccess = "true"))
-	int ScoreToGive = 56;
+
+
+	int ScoreToGive = 5;
+
+
 
 protected:
 	

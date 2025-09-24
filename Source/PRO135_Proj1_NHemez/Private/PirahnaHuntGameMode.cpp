@@ -9,7 +9,7 @@ void APirahnaHuntGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SpawnInterval = 2.0f;
+	SpawnInterval = 1.0f;
 
 	// Set a timer to call SpawnFish every 2 seconds
 	GetWorldTimerManager().SetTimer(SpawnTimer, this, &APirahnaHuntGameMode::SpawnFish, SpawnInterval, true);
