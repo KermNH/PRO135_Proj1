@@ -32,9 +32,9 @@ class PRO135_PROJ1_NHEMEZ_API ABoatPawn : public APawn
 	UNiagaraSystem* HitFX;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component", meta = (AllowPrivateAccess = "true"))
-	UGunManComponent* GunMan01;
+	UGunManComponent* GunManBack;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component", meta = (AllowPrivateAccess = "true"))
-	UGunManComponent* GunMan02;
+	UGunManComponent* GunManFront;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="UI", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UGameWidget> MainWidgetClass;
