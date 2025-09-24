@@ -18,13 +18,7 @@ class PRO135_PROJ1_NHEMEZ_API UGameWidget : public UUserWidget
 public:
 	
 	UFUNCTION(BlueprintImplementableEvent)
-	void GunnerRemoved(UGunManComponent* GunMan);
-
-	UFUNCTION(BlueprintImplementableEvent)
 	void GunnerAdded(UGunManComponent* GunMan);
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void ScoreChanged(int NewScore);
 	
 	//virtual bool Initialize() override;
 };

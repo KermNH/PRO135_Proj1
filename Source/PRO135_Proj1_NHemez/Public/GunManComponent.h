@@ -8,7 +8,6 @@
 #include "GunManWidget.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
-#include "NiagaraSystem.h"
 #include "GunManComponent.generated.h"
 
 class UArrowComponent;
@@ -20,10 +19,7 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PRO135_PROJ1_NHEMEZ_API UGunManComponent : public USkeletalMeshComponent
 {
 	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UStaticMesh* Gun;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="VFX", meta = (AllowPrivateAccess = "true"))
 	UNiagaraSystem* ShotFX;
 	
@@ -47,46 +43,24 @@ public:
 	void PlayShootAnim();
 
 protected:
+	
 	APawn* Owner;
-
-	//AHUD* HUD;
-
-	
-
-	
 
 public:	
 	// Sets default values for this component's properties
 	UGunManComponent();
-	
-	//UArrowComponent* GetArrow() const {
-	//	return Arrow;
-	//}
 
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	void Shoot(FVector2D Direction) const;
-
-	/** Called for looking input */
-	void Look(const FInputActionValue& Value);
-
+	
 	void SpawnFireFX(const FVector& EndLocation) const;
-
-	void SpawnBloodFX(const FVector& EndLocation) const;
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent);
-
-	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void DoLook(float Yaw, float Pitch);
-
+	
 	UFUNCTION(BlueprintCallable, Category="Input")
 	void CanShoot(FVector2D Target);
 	

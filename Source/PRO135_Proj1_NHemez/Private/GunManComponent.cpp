@@ -4,48 +4,24 @@
 #include "GunManComponent.h"
 
 #include "BoatPawn.h"
-#include "MyHUD.h"
 #include "FishPawn.h"
 
-#include "VectorTypes.h"
-#include "Components/ArrowComponent.h"
 
-/*
- * GunMan a une ref a sa carte
- * pour afficher sa carte il passe par le boat
- * il cree une carte en c++ la passe 
- *
- *
- **/
 
 // Sets default values for this component's properties
 UGunManComponent::UGunManComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	//Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Forward"));
 	if (Cast<ABoatPawn>(GetOwner()))
 	{
 		Owner = Cast<ABoatPawn>(GetOwner());
 	}
 }
 
-
-
 // Called when the game starts
 void UGunManComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController(); 
-	if (PlayerController)
-	{
-		AHUD* HUD = PlayerController->GetHUD();
-		if (HUD)
-		{
-			//Cast<AMyHUD>(HUD)->GetWidget();
-		}
-	}
 }
 
 void UGunManComponent::SpawnFireFX(const FVector& EndLocation) const
@@ -67,17 +43,6 @@ void UGunManComponent::SpawnFireFX(const FVector& EndLocation) const
 void UGunManComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
-void UGunManComponent::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
-	// ...
-}
-
-void UGunManComponent::DoLook(float Yaw, float Pitch)
-{
 
 }
 
@@ -143,15 +108,8 @@ void UGunManComponent::DoShoot(FVector2D Direction)
 			};
 		}
 	}
-	
-	//DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Yellow, false, 0.1, 0, 18);
 }
 
-
-//void UGunManComponent::PlayShootAnim_Implementation()
-//{
-//	SkeletalMesh->GetAnimInstance()
-//}
 
 
 void UGunManComponent::ReceiveDamage(int const DamageAmount)

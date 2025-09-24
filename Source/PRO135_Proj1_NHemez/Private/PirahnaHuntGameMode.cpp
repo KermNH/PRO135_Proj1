@@ -13,8 +13,7 @@ void APirahnaHuntGameMode::BeginPlay()
 
 	// Set a timer to call SpawnFish every 2 seconds
 	GetWorldTimerManager().SetTimer(SpawnTimer, this, &APirahnaHuntGameMode::SpawnFish, SpawnInterval, true);
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Game Started!"));
-	//CreateWidget<U
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Game Started!"));
 	
 }
 

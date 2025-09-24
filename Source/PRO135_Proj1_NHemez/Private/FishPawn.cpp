@@ -5,7 +5,6 @@
 
 #include "BoatPawn.h"
 #include "PirahnaHuntGameMode.h"
-#include "PropertyAccess.h"
 
 // Sets default values
 AFishPawn::AFishPawn()
@@ -41,7 +40,7 @@ void AFishPawn::ReceiveDamage(int const DamageAmount, FVector Location)
 
 void AFishPawn::SpawnBloodFX(FVector Location) const
 {
-	UNiagaraComponent* SpawnedFX = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			GetWorld(),
 			BloodFX,
 			Location,
@@ -68,7 +67,7 @@ void AFishPawn::HitBoat(AActor* MyActor, AActor* OtherActor)
 
 void AFishPawn::Death()
 {
-	UNiagaraComponent* SpawnedFX = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			GetWorld(),
 			DeathFX,
 			this->GetActorLocation(),

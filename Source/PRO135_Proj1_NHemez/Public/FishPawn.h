@@ -6,8 +6,6 @@
 #include "GameFramework/Pawn.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "NiagaraFunctionLibrary.h"
-#include "NiagaraComponent.h"
-#include "NiagaraSystem.h"
 #include "SteeringBehaviors.h"
 #include "FishPawn.generated.h"
 

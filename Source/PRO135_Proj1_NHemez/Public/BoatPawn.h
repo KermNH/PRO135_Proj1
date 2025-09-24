@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "GunManComponent.h"
-#include "GunManActor.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "GameWidget.h"
 #include "BoatPawn.generated.h"
@@ -23,23 +22,11 @@ class PRO135_PROJ1_NHEMEZ_API ABoatPawn : public APawn
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components", meta = (AllowPrivateAccess = "true"))
     UStaticMeshComponent* BoatMesh;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UArrowComponent* Arrow;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components", meta = (AllowPrivateAccess = "true"))
 	UCapsuleComponent* HitBox;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UFloatingPawnMovement* MovementComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int Life = 100;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TArray<FString> SlotNames;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int NbOfGunMan = 2;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="VFX", meta = (AllowPrivateAccess = "true"))
 	UNiagaraSystem* HitFX;
@@ -49,9 +36,12 @@ class PRO135_PROJ1_NHEMEZ_API ABoatPawn : public APawn
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component", meta = (AllowPrivateAccess = "true"))
 	UGunManComponent* GunMan02;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="UI", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UGameWidget> MainWidgetClass;
+
 	
 	
-	
+	 
 protected:
 
 	UPROPERTY(EditAnywhere, Category="Input")
@@ -64,10 +54,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MoveAction;
 	
-	/** Aim Input Action */
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* AimAction;
-
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* ShootAction;
 
@@ -85,14 +71,11 @@ protected:
 	
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
-
-	void Look(const FInputActionValue& Value);
-
+	
 	void Shoot(const FInputActionValue& Value);
 
 	FVector2D MouseScreenTOWorldLocation() const;
 	
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	void Death();
@@ -108,10 +91,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoMove(float Right, float Forward);
-
-	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void DoLook(FVector2D WorldLocation);
-
+	
 	void ReceiveDamage(int const DamageAmount, AActor* DamageCauser);
 
     UGunManComponent* GetNearestGunman(FVector WorldLocation) const;

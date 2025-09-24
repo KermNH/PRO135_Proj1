@@ -9,10 +9,8 @@
 #include "Engine/Engine.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
-#include "Components/ArrowComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Controller.h"
-#include "Physics/ImmediatePhysics/ImmediatePhysicsShared/ImmediatePhysicsCore.h"
 
 // Sets default values
 ABoatPawn::ABoatPawn()
@@ -26,11 +24,7 @@ ABoatPawn::ABoatPawn()
 	GunMan01 = CreateDefaultSubobject<UGunManComponent>(TEXT("GunMan01"));
 	GunMan02 = CreateDefaultSubobject<UGunManComponent>(TEXT("GunMan02"));
 	GunManArray = {GunMan01, GunMan02};
-
-	//Fleche principale
-	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Forward"));
-	Arrow->SetupAttachment(RootComponent);
-
+	
 	HitBox = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HitBox"));
 	HitBox->SetupAttachment(RootComponent);
 	
@@ -48,22 +42,11 @@ void ABoatPawn::Move(const FInputActionValue& Value)
 	DoMove(MovementVector.X, MovementVector.Y);
 }
 
-void ABoatPawn::Look(const FInputActionValue& Value)
-{
-
-	DoLook(MouseScreenTOWorldLocation());
-
-	// route the input
-	//DoLook(LookAxisVector.X, LookAxisVector.Y);
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("X : ") + FString::SanitizeFloat(LookAxisVector.X) + TEXT(" - Y : ") + FString::SanitizeFloat(LookAxisVector.Y));
-}
-
 void ABoatPawn::Shoot(const FInputActionValue& Value)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Purple, TEXT("InputFire"));
 	for (UGunManComponent* GunMan : GunManArray)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Yellow, TEXT("Trying to shoot"));
 		GunMan->CanShoot(MouseScreenTOWorldLocation());
 	}
 }
@@ -78,9 +61,6 @@ FVector2D ABoatPawn::MouseScreenTOWorldLocation() const
 	
 	int32 ViewportSizeX, ViewportSizeY;
 	PlayerController->GetViewportSize(ViewportSizeX, ViewportSizeY);
-
-	// Get the screen location of the mouse to world location
-	//auto ScreenLocation = FVector2D(ViewportSizeX, ViewportSizeY);
 
 	FVector WorldLocation = FVector(0,0,0);
 	FVector WorldDirection = FVector(0,0,1);
@@ -99,13 +79,11 @@ FVector2D ABoatPawn::MouseScreenTOWorldLocation() const
 // Called when the game starts or when spawned
 void ABoatPawn::BeginPlay()
 {
-	Super::BeginPlay();
-	PlayerController = Cast<APlayerController>(GetController());
-
-	//GunManArray = {GunMan01, GunMan02};
+	Super::BeginPlay();	
 	
-	if (PlayerController == Cast<APlayerController>(GetController()))
+	if (Cast<APlayerController>(GetController()))
 	{
+		PlayerController = Cast<APlayerController>(GetController());
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			if (DefaultInputMappingContext)
@@ -118,24 +96,27 @@ void ABoatPawn::BeginPlay()
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("No System found"));
 		}
 
-		//for (int i = 0; i < NbOfGunMan; i++)
-		//{
-		//	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red,TEXT("Ajout de gunner"));
-		//	if (SlotNames.Num()-1 < i)
-		//	{
-		//		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red,TEXT("Ajout de gunner"));
-		//		GunManArray.Add(NewObject<UGunManComponent>(this, UGunManComponent::StaticClass()));
-		//		GunManArray[i]->SetupAttachment(BoatMesh, FName(SlotNames[i]));
-		//	}
-		//}
-
-		for (UGunManComponent* GunMan : GunManArray)
+		if (MainWidgetClass) // TSubclassOf<UUserWidget> set in Blueprint
 		{
-			if (GunMan)
+			MainWidget = CreateWidget<UGameWidget>(GetWorld(), MainWidgetClass);
+			if (MainWidget)
 			{
-				MainWidget->GunnerAdded(GunMan);
+				MainWidget->AddToViewport();
+
+				for (UGunManComponent* GunMan : GunManArray)
+				{
+					if (GunMan)
+					{
+						if (MainWidget->IsValidLowLevelFast())
+						{
+							MainWidget->GunnerAdded(GunMan);
+						}
+				
+					}
+				}
 			}
 		}
+		
 	}
 	else
 	{
@@ -151,7 +132,7 @@ void ABoatPawn::Death()
 
 void ABoatPawn::SpawnHitFX(FVector Location) const
 {
-	UNiagaraComponent* SpawnedFX = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			GetWorld(),
 			HitFX,
 			Location,
@@ -177,10 +158,7 @@ void ABoatPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	{
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABoatPawn::Move);
-
-		//Lookin
-		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &ABoatPawn::Look);
-
+		
 		//Shooting
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &ABoatPawn::Shoot);
 	}
@@ -189,11 +167,7 @@ void ABoatPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void ABoatPawn::DoMove(const float Right, const float Forward)
 {
 	if (GetController() != nullptr)
-	{
-		// find out which way is forward
-		//const FRotator Rotation = GetController()->GetControlRotation();
-		//const FRotator YawRotation(0, 0, 0);
-		
+	{		
 		// add movement 
 		AddMovementInput(FVector(1,0,0), Forward);
 		AddMovementInput(FVector(0,1,0), Right);
@@ -206,16 +180,6 @@ void ABoatPawn::DoMove(const float Right, const float Forward)
 	}
 }
 
-void ABoatPawn::DoLook(FVector2D WorldLocation)
-{
-	if (GetController() != nullptr)
-	{
-		//for (UGunManComponent* GunMan : GunManArray)
-		//{
-		//	//GunMan::DoSMTHG();
-		//}
-	}
-}
 
 void ABoatPawn::ReceiveDamage(int const DamageAmount, AActor* DamageCauser)
 {
