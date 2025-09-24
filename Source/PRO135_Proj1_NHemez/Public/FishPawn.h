@@ -28,7 +28,7 @@ class PRO135_PROJ1_NHEMEZ_API AFishPawn : public APawn
     int MinLife = 100.0f;
     	
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int MaxLife = 100.0f;
+	int MaxLife = 200.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="VFX", meta = (AllowPrivateAccess = "true"))
 	UNiagaraSystem* BloodFX;
