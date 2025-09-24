@@ -18,17 +18,17 @@ class PRO135_PROJ1_NHEMEZ_API AFishPawn : public APawn
 	UStaticMeshComponent* FishMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UFloatingPawnMovement* MovementComponent;
+	UFloatingPawnMovement* MovementCom;
 
 	UPROPERTY(EditAnywhere, Blueprintable, Category="Components", meta = (AllowPrivateAccess = "true"))
 	USteeringBehaviors* SteeringComponent;
 	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    int MinLife = 100.0f;
+    int MinLife = 10.0f;
     	
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int MaxLife = 200.0f;
+	int MaxLife = 50.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="VFX", meta = (AllowPrivateAccess = "true"))
 	UNiagaraSystem* BloodFX;
@@ -38,7 +38,7 @@ class PRO135_PROJ1_NHEMEZ_API AFishPawn : public APawn
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="VFX", meta = (AllowPrivateAccess = "true"))
 
-	int ScoreToGive = 2;
+	int ScoreToGive = 20;
 
 
 protected:
