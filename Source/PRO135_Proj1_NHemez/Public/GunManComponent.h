@@ -30,7 +30,7 @@ class PRO135_PROJ1_NHEMEZ_API UGunManComponent : public USkeletalMeshComponent
 	float RotationMin = -1.0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int Damage = 35;
+	int Damage = 25;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int Life = 3;

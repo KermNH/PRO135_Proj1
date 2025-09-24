@@ -26,10 +26,7 @@ class PRO135_PROJ1_NHEMEZ_API ABoatPawn : public APawn
 	UCapsuleComponent* HitBox;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-
 	UFloatingPawnMovement* MovementComp;
-
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="VFX", meta = (AllowPrivateAccess = "true"))
 	UNiagaraSystem* HitFX;
