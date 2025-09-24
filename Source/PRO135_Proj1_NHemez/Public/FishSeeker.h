@@ -21,7 +21,7 @@ protected:
 	
 	virtual void BeginPlay() override;
 
-	ABoatPawn* Target = nullptr;
+	ABoatPawn* TheTarget = nullptr;
 	
 public:
 
